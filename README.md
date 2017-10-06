@@ -50,15 +50,24 @@ Validé avec les versions :
 Il est recommandé de créer un répertoire dédié pour y stocker le script. 
 Les configurations XML sont stockées dans un sous-répertoire dédié.
 
+Version cURL:
 ```
-chmod +x bm-backup-pfsense-curl.sh
-./bm-backup-pfsense-curl.sh
+chmod +x pfmotion_curl.sh
+./pfmotion_curl.sh
 ```
 
+Version cURL multi:
 ```
-chmod +x bm-backup-pfsense-wget.sh
-./bm-backup-pfsense-wget.sh
+chmod +x pfmotion_curl_multi.sh
+./pfmotion_curl_multi.sh
 ```
+
+Version wget :
+```
+chmod +x pfmotion_curl_wget.sh
+./pfmotion_curl_wget.sh
+```
+
 
 Le fichier de backup contient le nom du pare-feu :
 ```
