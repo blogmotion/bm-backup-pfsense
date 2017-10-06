@@ -4,7 +4,7 @@
 # Website : http://blogmotion.fr
 # backup pfsense from v2.2.6 to v2.3.4-RELEASE-p1 and more (https://doc.pfsense.org/index.php/Remote_Config_Backup)
 
-VERSION="2017.04.08_cURL"
+VERSION="2017.10.07_cURL"
 RUNDIR="$( cd "$( dirname "$0" )" && pwd )"
 
 ##############################
