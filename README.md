@@ -5,8 +5,14 @@ bm-backup-pfsense (blogmotion backup pfsense)
 ### Description
 Ce script permet de sauvegarder la configuration d'un pare-feu pfSense, en récupérant à distance le fichier XML via HTTP(S).
 
-Deux versions du script existent, l'une est basée sur le binaire wget et l'autre sur cURL (plus rapide).
+3 versions du script existent :
+- une basée sur le binaire wget 
+- une basée sur le binaire cURL (plus rapide)
+- une basée sur le binaire cURL (plus rapide) version multi
+
 Suivant si l'un ou l'autre binaire est présent, choisissez la version en adéquation.
+
+La version multi permet de sauvegarder plusieurs pare-feu dans le même script.
 
 ## Variables
 Vous devez éditer le script (nano, vim, etc.) pour saisir à minima :
@@ -24,6 +30,8 @@ Nécessite
 
 Fonctionne en théorie sur n'importe quelle distribution Linux. Testé sur Debian, CentOS, pfSense.
 
+_Note : la modification des variables BACKUP_RRD, BACKUP_PKGINFO, BACKUP_PASSWORD n'est pour l'instant pas supportée._
+
 ## Compatibilité
 Ce script est compatible avec pfSense:
 - [X] 2.3.x et plus
@@ -32,6 +40,7 @@ Ce script est compatible avec pfSense:
 Non testé sur les versions inférieures.
 
 Validé avec les versions :
+- [X] 2.3.4-RELEASE-p1
 - [X] 2.3.3
 - [X] 2.3.2
 - [X] 2.3.1
@@ -51,6 +60,14 @@ chmod +x bm-backup-pfsense-wget.sh
 ./bm-backup-pfsense-wget.sh
 ```
 
+Le fichier de backup contient le nom du pare-feu :
+```
+/tmp/conf_backup/config-<nom-hote>_<domaine>-<YYYYmmJJHHMMSS>.xml
+```
+Exemple :
+```
+/tmp/conf_backup/config-pf_blogmotion.fr-20171007002812.xml
+```
 
 ### [EN] Description
 soon
