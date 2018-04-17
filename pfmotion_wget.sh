@@ -2,7 +2,7 @@
 # Author: Mr Xhark -> @xhark
 # License : Creative Commons http://creativecommons.org/licenses/by-nd/4.0/deed.fr
 # Website : http://blogmotion.fr
-# backup pfsense from v2.2.6 to v2.4.0 and more (https://doc.pfsense.org/index.php/Remote_Config_Backup)
+# backup pfsense from v2.2.6 to v2.4.3 and more (https://doc.pfsense.org/index.php/Remote_Config_Backup)
 
 VERSION="2017.10.07_wget"
 RUNDIR="$( cd "$( dirname "$0" )" && pwd )"

@@ -41,6 +41,7 @@ Ce script est compatible avec pfSense:
 Non testé sur les versions inférieures.
 
 Validé avec les versions :
+- [X] 2.4.3
 - [X] 2.4.0
 - [X] 2.3.4-RELEASE-p1
 - [X] 2.3.3
