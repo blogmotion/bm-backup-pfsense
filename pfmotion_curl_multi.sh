@@ -76,14 +76,14 @@ for PFSENSE_HOST in $LISTE_SRV
 	if grep -qi 'username or password' $CONFIG_TMP; then
 			echo ; echo "   !!! AUTHENTICATION ERROR (${PFSENSE_HOST}): PLEASE CHECK LOGIN AND PASSWORD"; echo
 			rm -f $CONFIG_TMP
-			exit 1
+			continue
 	fi
 
 	# xml file contains doctype when the URL is wrong
 	if grep -qi 'doctype html' $CONFIG_TMP; then
 		echo ; echo "   !!! URL ERROR (${PFSENSE_HOST}): HTTP OR HTTPS ?"; echo
 		rm -f $CONFIG_TMP
-		exit 1
+		continue
 	fi
 
 	hostname=$(grep -m1 '<hostname' $CONFIG_TMP | cut -f2 -d">"|cut -f1 -d"<")
