@@ -3,6 +3,8 @@ bm-backup-pfsense (blogmotion backup pfsense)
 > english version below
 
 ### Description
+Présentation ➡️ https://blogmotion.fr/systeme/script-backup-pfsense-configuration-16496
+
 Ce script permet de sauvegarder la configuration d'un pare-feu pfSense, en récupérant à distance le fichier XML via HTTP(S).
 
 3 versions du script existent :
