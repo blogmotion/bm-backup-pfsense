@@ -34,6 +34,7 @@ _Note : la modification des variables BACKUP_RRD, BACKUP_PKGINFO, BACKUP_PASSWOR
 
 ## Compatibilité
 Ce script est compatible avec pfSense:
+- [X] 2.5.x
 - [X] 2.4.x
 - [X] 2.3.x
 - [X] 2.2.x
@@ -41,6 +42,7 @@ Ce script est compatible avec pfSense:
 Non testé sur les versions inférieures.
 
 Validé avec les versions :
+- [X] 2.5.2
 - [X] 2.4.3
 - [X] 2.4.0
 - [X] 2.3.4-RELEASE-p1
