@@ -1,8 +1,8 @@
 #!/bin/sh
 # Author: Mr Xhark -> @xhark
 # License : Creative Commons http://creativecommons.org/licenses/by-nd/4.0/deed.fr
-# Website : http://blogmotion.fr
-# backup pfsense from v2.2.6 to v2.4.3 and more (https://doc.pfsense.org/index.php/Remote_Config_Backup)
+# Website : https://blogmotion.fr/systeme/script-backup-pfsense-configuration-16496
+# backup pfsense from v2.2.6 to v2.6 and more (https://docs.netgate.com/pfsense/en/latest/backup/remote-backup.html)
 
 VERSION="2017.10.07_wget"
 RUNDIR="$( cd "$( dirname "$0" )" && pwd )"
