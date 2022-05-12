@@ -38,8 +38,7 @@ curl -V $i >/dev/null 2>&1 || { echo "ERROR : cURL MUST be installed to run this
 for PFSENSE_HOST in $LISTE_SRV
 	do
 
-	# backup filename
-	BACKUP_NAME="$BACKUP_DIR/pfSense-backup-`date +%Y-%m-%d`.xml"
+	# variables
 	COOKIE_FILE="`mktemp /tmp/pfsbck.XXXXXXXX`"
 	CSRF1_TOKEN="`mktemp /tmp/csrf1.XXXXXXXX`"
 	CSRF2_TOKEN="`mktemp /tmp/csrf2.XXXXXXXX`"
