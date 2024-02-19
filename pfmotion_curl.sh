@@ -19,6 +19,7 @@ PFSENSE_PASS=VotreMdp
 
 # where to store backups
 BACKUP_DIR="${RUNDIR}/conf_backup"
+BACKUP_PASSWORD=encrpytionpass
 
 ######## END VARIABLES ########
 ##############################
@@ -39,11 +40,8 @@ CSRF2_TOKEN="`mktemp /tmp/csrf2.XXXXXXXX`"
 CONFIG_TMP="`mktemp /tmp/config-tmp-xml.XXXXXXXX`"
 NOW=`date +%Y%m%d%H%M%S`
 
-unset RRD PKG PW
-
-if [ "$BACKUP_RRD" = "0" ] ;	 then RRD="&donotbackuprrd=yes" ; fi
-if [ "$BACKUP_PKGINFO" = "0" ] ; then PKG="&nopackages=yes" ; fi
-if [ -n "$BACKUP_PASSWORD" ] ; 	 then PW="&encrypt_password=$BACKUP_PASSWORD&encrypt_passconf=$BACKUP_PASSWORD&encrypt=on" ; fi
+unset ENC
+if [ -n "$BACKUP_PASSWORD" ] ; 	 then ENC="&encrypt=yes&encrypt_password=$BACKUP_PASSWORD&encrypt_password_confirm=$BACKUP_PASSWORD" ; fi
 
 mkdir -p "$BACKUP_DIR"
 
@@ -61,7 +59,7 @@ curl -Ss --noproxy '*' --insecure --location --cookie-jar $COOKIE_FILE --cookie 
 
 # submit download to save config xml
 curl -Ss --noproxy '*' --insecure --cookie-jar $COOKIE_FILE --cookie $COOKIE_FILE \
-  --data "Submit=download&download=download&donotbackuprrd=yes&__csrf_magic=$(head -n 1 $CSRF2_TOKEN)" \
+  --data "Submit=download&download=download&donotbackuprrd=yes&__csrf_magic=$(head -n 1 $CSRF2_TOKEN)${ENC}" \
   "$PFSENSE_HOST/diag_backup.php" > $CONFIG_TMP \
   || echo "ERROR: SAVING XML FILE"
 
@@ -75,7 +73,7 @@ fi
 # xml file contains doctype when the URL is wrong
 if grep -qi 'doctype html' $CONFIG_TMP; then
 	echo ; echo "   !!! URL ERROR (${PFSENSE_HOST}): HTTP OR HTTPS ?"; echo
-	rm -f $CONFIG_TMP
+    #rm -f $CONFIG_TMP
 	exit 1
 fi
 
