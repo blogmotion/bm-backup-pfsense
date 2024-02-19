@@ -73,7 +73,7 @@ fi
 # xml file contains doctype when the URL is wrong
 if grep -qi 'doctype html' $CONFIG_TMP; then
 	echo ; echo "   !!! URL ERROR (${PFSENSE_HOST}): HTTP OR HTTPS ?"; echo
-    #rm -f $CONFIG_TMP
+    	rm -f $CONFIG_TMP
 	exit 1
 fi
 
