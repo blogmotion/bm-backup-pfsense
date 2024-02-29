@@ -2,9 +2,9 @@
 # Author: Mr Xhark -> @xhark
 # License : Creative Commons http://creativecommons.org/licenses/by-nd/4.0/deed.fr
 # Website : https://blogmotion.fr/systeme/script-backup-pfsense-configuration-16496
-# backup pfsense from v2.2.6 to v2.6 and more (https://docs.netgate.com/pfsense/en/latest/backup/remote-backup.html)
+# backup pfsense from v2.2.6 to v2.7.2 and more (https://docs.netgate.com/pfsense/en/latest/backup/remote-backup.html)
 
-VERSION="2017.10.07_cURL"
+VERSION="2024.02.29_cURL"
 RUNDIR="$( cd "$( dirname "$0" )" && pwd )"
 
 ##############################
@@ -13,17 +13,24 @@ RUNDIR="$( cd "$( dirname "$0" )" && pwd )"
 # pfSense host OR IP (note: do not include the final /, otherwise backup will fail)
 PFSENSE_HOST=https://192.168.12.34
 
-# login - password
+# pfSense credentials
 PFSENSE_USER=admin
-PFSENSE_PASS=VotreMdp
+PFSENSE_PASS=password
+
+# backup options
+BACKUP_PKGINFO=1
+BACKUP_RRD=0
+BACKUP_PASSWORD=SuperSecret
 
 # where to store backups
 BACKUP_DIR="${RUNDIR}/conf_backup"
 
 ######## END VARIABLES ########
-##############################
+###############################
 
 ######################################### NE RIEN TOUCHER SOUS CETTE LIGNE #########################################
+
+cd /tmp
 
 echo
 echo "*** pfMotion-backup script by @xhark (v${VERSION}) ***"
@@ -43,7 +50,7 @@ unset RRD PKG PW
 
 if [ "$BACKUP_RRD" = "0" ] ;	 then RRD="&donotbackuprrd=yes" ; fi
 if [ "$BACKUP_PKGINFO" = "0" ] ; then PKG="&nopackages=yes" ; fi
-if [ -n "$BACKUP_PASSWORD" ] ; 	 then PW="&encrypt_password=$BACKUP_PASSWORD&encrypt_passconf=$BACKUP_PASSWORD&encrypt=on" ; fi
+if [ -n "$BACKUP_PASSWORD" ] ; 	 then PW="&encrypt=yes&encrypt_password=${BACKUP_PASSWORD}&encrypt_password_confirm=${BACKUP_PASSWORD}" ; fi
 
 mkdir -p "$BACKUP_DIR"
 
@@ -60,10 +67,10 @@ curl -Ss --noproxy '*' --insecure --location --cookie-jar $COOKIE_FILE --cookie 
   || echo "ERROR: SUBMIT THE LOGIN"
 
 # submit download to save config xml
-curl -Ss --noproxy '*' --insecure --cookie-jar $COOKIE_FILE --cookie $COOKIE_FILE \
-  --data "Submit=download&download=download&donotbackuprrd=yes&__csrf_magic=$(head -n 1 $CSRF2_TOKEN)" \
-  "$PFSENSE_HOST/diag_backup.php" > $CONFIG_TMP \
-  || echo "ERROR: SAVING XML FILE"
+XMLFILENAME=$(curl -sS -OJ --noproxy '*' --insecure --cookie-jar $COOKIE_FILE --cookie $COOKIE_FILE \
+  --data "Submit=download&download=download${RRD}${PKG}${PW}&__csrf_magic=$(head -n 1 $CSRF2_TOKEN)" \
+  --write-out "%{filename_effective}" "$PFSENSE_HOST/diag_backup.php" \
+  || (echo "ERROR: READING FILENAME" && exit 1) )
 
 # check if credentials are valid
 if grep -qi 'username or password' $CONFIG_TMP; then
@@ -79,15 +86,10 @@ if grep -qi 'doctype html' $CONFIG_TMP; then
 	exit 1
 fi
 
-hostname=$(grep -m1 '<hostname' $CONFIG_TMP | cut -f2 -d">"|cut -f1 -d"<")
-domain=$(grep -m1 '<domain' $CONFIG_TMP | cut -f2 -d">"|cut -f1 -d"<")
-backup_file="config-${hostname}_${domain}-${NOW}.xml"
-
 # definitive config file name
-mv $CONFIG_TMP "$BACKUP_DIR/$backup_file" && echo "Backup OK : $BACKUP_DIR/$backup_file" || echo "Backup NOK !!! ERROR !!!"
+mv /tmp/${XMLFILENAME} $BACKUP_DIR && echo "Backup OK : ${BACKUP_DIR}/${XMLFILENAME} " || echo "Backup NOK !!! ERROR !!!"
 
 # cleaning tmp and cookie files
 rm -f "$COOKIE_FILE" "$CSRF1_TOKEN" "$CSRF2_TOKEN"
 
-echo
-exit 0
+echo && exit 0
