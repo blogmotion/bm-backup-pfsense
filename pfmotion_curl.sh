@@ -62,19 +62,19 @@ if [ -n "$BACKUP_PASSWORD" ] ;     then PW="&encrypt=yes&encrypt_password=${BACK
 mkdir -p "$BACKUP_DIR"
 
 # fetch login
-curl -Ss --noproxy '*' "$CERT" --cookie-jar "$COOKIE_FILE" "$PFSENSE_HOST/diag_backup.php" \
+curl -Ss --noproxy '*' $CERT --cookie-jar "$COOKIE_FILE" "$PFSENSE_HOST/diag_backup.php" \
   | grep "name='__csrf_magic'" | sed 's/.*value="\(.*\)".*/\1/' > "$CSRF1_TOKEN" \
   || echo "ERROR: FETCH"
 
 # submit the login
-curl -Ss --noproxy '*' "$CERT" --location --cookie-jar "$COOKIE_FILE" --cookie "$COOKIE_FILE" \
+curl -Ss --noproxy '*' $CERT --location --cookie-jar "$COOKIE_FILE" --cookie "$COOKIE_FILE" \
   --data "login=Login&usernamefld=${PFSENSE_USER}&passwordfld=${PFSENSE_PASS}&__csrf_magic=$(cat "$CSRF1_TOKEN")" \
  "$PFSENSE_HOST/diag_backup.php"  | grep "name='__csrf_magic'" \
   | sed 's/.*value="\(.*\)".*/\1/' > "$CSRF2_TOKEN" \
   || echo "ERROR: SUBMIT THE LOGIN"
 
 # submit download to save config xml
-XMLFILENAME=$(curl -sS -OJ --noproxy '*' "$CERT" --cookie-jar "$COOKIE_FILE" --cookie "$COOKIE_FILE" \
+XMLFILENAME=$(curl -sS -OJ --noproxy '*' $CERT --cookie-jar "$COOKIE_FILE" --cookie "$COOKIE_FILE" \
   --data "Submit=download&download=download${RRD}${PKGINFO}${EXTRADATA}${SSHKEY}${PW}&__csrf_magic=$(head -n 1 "$CSRF2_TOKEN")" \
   --write-out "%{filename_effective}" "$PFSENSE_HOST/diag_backup.php" \
   || (echo "ERROR: READING FILENAME" && exit 1) )
